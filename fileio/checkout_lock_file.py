@@ -19,10 +19,13 @@ def checkout_lock_file(filename, checkloops='', throwerror=''):
         time.sleep(1)
         loop+=1
     if loop<loops:
-        fid=open(filename,'w')
+        try:
+            fid=open(filename,'w')
+        except Exception:
+            fid=-1
     else:
         fid=-1
-    if fid<0:
+    if fid==-1:
         if makeanerror:
             raise Exception('Unable to obtain lock with file '+ filename +'.  If you believe a program that has crashed created this file then you should manually delete it.')
     return fid

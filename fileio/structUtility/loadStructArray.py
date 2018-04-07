@@ -5,21 +5,20 @@ Created on Sat Mar 17 15:51:43 2018
 
 @author: yanglite
 """
-
-def loadStructArray(fname='/Users/yanglite/Desktop/a.txt',fields=[]):
+from char2struct import *
+def loadStructArray(fname='',fields=[]):
     # if no fields, get fields from first line
     try:
-        a=[]
         fid=open(fname,'r')
     except FileNotFoundError:
-        return a
+        return []
     else:
+        a=[]
         if not fields:
             s=fid.readline()
-            fields=s.split('\t')
+            fields=s[:-1].split('\t')
         for i in fid:
             a.append(char2struct(i,fields))
-        return a
         fid.close()
-            
+        return a
         
