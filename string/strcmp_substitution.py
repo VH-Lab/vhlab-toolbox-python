@@ -43,12 +43,12 @@ def strcmp_substitution(s1, s2, SubstituteStringSymbol = '#', UseSubstituteStrin
     
     
      Examples:
-               s1 = ['.*\.ext\>']; equivalent of *.ext on the command line
-               s2 = { 'myfile1.ext' 'myfile2.ext' 'myotherfile.ext1'};
+               s1 = '.*\.ext$'; equivalent of *.ext on the command line
+               s2 = [ 'myfile1.ext', 'myfile2.ext', 'myotherfile.ext1'];
                [tf, matchstring, substring] = strcmp_substitution(s1,s2,'UseSubstituteString',0)
     
-               s1 = ['stimtimes#.txt'];
-               s2 = { 'dummy.ext' 'stimtimes123.txt' 'stimtimes.txt' 'stimtimes456.txt'}
+               s1 = 'stimtimes#.txt';
+               s2 = [ 'dummy.ext', 'stimtimes123.txt', 'stimtimes.txt', 'stimtimes456.txt']
                [tf, matchstring, substring] = strcmp_substitution(s1,s2)
     '''
     
@@ -79,15 +79,13 @@ def strcmp_substitution(s1, s2, SubstituteStringSymbol = '#', UseSubstituteStrin
     if UseSubstituteString:
         # what work do we have remaining?
         indexes=[i for i,x in enumerate(tf) if x==False]
-        '''
-        
-        '''
-        myregexp_literalexception = '[\\'+ LiteralCharacter+ ']' +SubstituteStringSymbol 
-        myregexp = SubstituteStringSymbol
-        mymatches = setdiff( regexp(s1,myregexp), 1+regexp(s1,myregexp_literalexception) )
-        s1_ = s1
-        
-    
+        [firsthalf,lasthalf]=re.split(SubstituteStringSymbol,s1)
+        for i,j in enumerate(s2):
+            if j.startswith(firsthalf) and j.endswith(lasthalf):
+                sub=j.replace(firsthalf,'').replace(lasthalf,'')
+                if sub:
+                    tf[s2.index(j)]=True
+                    substitute_string[i]=sub
     # things that don't match and clean up match string indexes
     indexes=[i for i,x in enumerate(tf) if x==False]
     for i in indexes:
