@@ -7,7 +7,23 @@ Created on Sun Mar 11 16:26:30 2018
 import os
 import time
 def checkout_lock_file(filename, checkloops='', throwerror=''):
-    # CHECKOUT_LOCK_FILE Try to establish control of a lock file
+    '''CHECKOUT_LOCK_FILE Try to establish control of a lock file
+    
+    FID = CHECKOUT_LOCK_FILE(FILENAME)
+    
+    This function tries to check out the file FILENAME so that different
+    programs do not perform some operation at the same time. This is a quick
+    and dirty semaphore implementation (see Wikipedia if unfamilar with 
+    semaphores).  
+    
+    This function tries to create an empty file called FILENAME. If the file is
+    NOT already present and the creation successful, the
+    file will be created and FID will return the file ID (see help fopen).
+    
+    If instead the file already exists, the function will check
+    every 1 second for 30 iterations to see if the file disappears.
+    If the function is never able to create a new file because the 
+    old file exists, then the function will give up and return FID < 0.'''
     loops = 30
     makeanerror = 0
     if checkloops:
