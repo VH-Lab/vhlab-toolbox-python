@@ -22,3 +22,13 @@ from .structwhatvaries import structwhatvaries
 from .tabstr2struct import tabstr2struct
 from .var2struct import var2struct
 from .workspace2struct import workspace2struct
+from .matrow2cell import matrow2cell
+from .nanstderr import nanstderr
+from .partial_struct_match import partial_struct_match
+from .prettyjson import prettyjson
+from .rowvec import rowvec
+from .hasAllFields import hasAllFields
+from .hashmatlabvariable import hashmatlabvariable
+from .isint import isint
+from .islikevarname import islikevarname
+from .jsonencodenan import jsonencodenan
