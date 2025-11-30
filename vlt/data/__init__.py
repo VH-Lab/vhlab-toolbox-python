@@ -15,3 +15,8 @@ from .fieldsearch import fieldsearch
 from .findclosest import findclosest
 from .findrowvec import findrowvec
 from .flattenstruct2table import flattenstruct2table
+from .matrow2cell import matrow2cell
+from .nanstderr import nanstderr
+from .partial_struct_match import partial_struct_match
+from .prettyjson import prettyjson
+from .rowvec import rowvec
