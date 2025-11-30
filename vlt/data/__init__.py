@@ -15,3 +15,8 @@ from .fieldsearch import fieldsearch
 from .findclosest import findclosest
 from .findrowvec import findrowvec
 from .flattenstruct2table import flattenstruct2table
+from .hasAllFields import hasAllFields
+from .hashmatlabvariable import hashmatlabvariable
+from .isint import isint
+from .islikevarname import islikevarname
+from .jsonencodenan import jsonencodenan
