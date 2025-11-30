@@ -2,6 +2,7 @@ import os
 import time
 import datetime
 import random
+import numpy as np
 
 # --- Basics ---
 
@@ -69,6 +70,39 @@ def text2cellstr(filename):
     with open(filename, 'r') as f:
         lines = f.read().splitlines()
     return lines
+
+def cellstr2text(filename, cs):
+    """
+    Write a list of strings to a text file.
+
+    vlt.file.cellstr2text(filename, cs)
+
+    Writes the list of strings cs to the new text file filename.
+    One entry is written per line.
+    """
+    try:
+        with open(filename, 'w') as f:
+            for s in cs:
+                f.write(str(s) + '\n')
+    except Exception as e:
+        raise Exception(f"Could not open {filename} for writing: {e}")
+
+def filename_value(filename_or_fileobj):
+    """
+    Return the string of a filename whether it is a filename or inside a fileobj.
+
+    filename = vlt.file.filename_value(filename_or_fileobj)
+
+    Given a value which may be a filename or a vlt.file.fileobj object (or similar),
+    return either the filename or the fullpathfilename field of the object.
+    """
+    # Check if it has 'fullpathfilename' attribute
+    if hasattr(filename_or_fileobj, 'fullpathfilename'):
+        return str(filename_or_fileobj.fullpathfilename)
+    elif hasattr(filename_or_fileobj, 'name') and hasattr(filename_or_fileobj, 'read'): # File-like object
+        return str(filename_or_fileobj.name)
+    else:
+        return str(filename_or_fileobj)
 
 # --- Lock ---
 
