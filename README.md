@@ -8,6 +8,13 @@ To use this toolbox, it is recommended to set up a virtual environment.
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-# Install dependencies (if any)
-# pip install -r requirements.txt
+pip install -r requirements.txt
+```
+
+## Running Tests
+
+To run the unit tests, ensure you have the dependencies installed and run the following command from the root directory:
+
+```bash
+python3 -m unittest discover tests
 ```
