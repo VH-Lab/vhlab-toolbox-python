@@ -6,3 +6,12 @@ from .celloritem import celloritem
 from .columnize_struct import columnize_struct
 from .colvec import colvec
 from .conditional import conditional
+from .dropnan import dropnan
+from .emptystruct import emptystruct
+from .emptytable import emptytable
+from .eqlen import eqlen
+from .equnique import equnique
+from .fieldsearch import fieldsearch
+from .findclosest import findclosest
+from .findrowvec import findrowvec
+from .flattenstruct2table import flattenstruct2table

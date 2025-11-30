@@ -16,6 +16,15 @@ This file tracks the routines ported so far.
 - `vlt.data.columnize_struct`: `vlt.data.columnize_struct`
 - `vlt.data.colvec`: `vlt.data.colvec`
 - `vlt.data.conditional`: `vlt.data.conditional`
+- `vlt.data.dropnan`: `vlt.data.dropnan`
+- `vlt.data.emptystruct`: `vlt.data.emptystruct`
+- `vlt.data.emptytable`: `vlt.data.emptytable`
+- `vlt.data.eqlen`: `vlt.data.eqlen`
+- `vlt.data.equnique`: `vlt.data.equnique`
+- `vlt.data.fieldsearch`: `vlt.data.fieldsearch`
+- `vlt.data.findclosest`: `vlt.data.findclosest`
+- `vlt.data.findrowvec`: `vlt.data.findrowvec`
+- `vlt.data.flattenstruct2table`: `vlt.data.flattenstruct2table`
 
 ### vlt.file (Dependencies)
 - `vlt.file`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`, `checkout_lock_file`, `release_lock_file`, `addline`
