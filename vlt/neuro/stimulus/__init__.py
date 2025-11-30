@@ -1,0 +1,4 @@
+from .stimids2reps import stimids2reps
+from .plot_stimulus_timeseries import plot_stimulus_timeseries
+from .findcontrolstimulus import findcontrolstimulus
+from .stimulus_response_scalar import stimulus_response_scalar
