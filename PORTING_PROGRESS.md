@@ -18,6 +18,4 @@ This file tracks the routines ported so far.
 - `vlt.data.conditional`: `vlt.data.conditional`
 
 ### vlt.file (Dependencies)
-- `vlt.file.basics`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`
-- `vlt.file.lock`: `checkout_lock_file`, `release_lock_file`
-- `vlt.file.text`: `addline`
+- `vlt.file`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`, `checkout_lock_file`, `release_lock_file`, `addline`
