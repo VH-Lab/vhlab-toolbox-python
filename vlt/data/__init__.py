@@ -15,3 +15,10 @@ from .fieldsearch import fieldsearch
 from .findclosest import findclosest
 from .findrowvec import findrowvec
 from .flattenstruct2table import flattenstruct2table
+from .string2cell import string2cell
+from .structfullfields import structfullfields
+from .structmerge import structmerge
+from .structwhatvaries import structwhatvaries
+from .tabstr2struct import tabstr2struct
+from .var2struct import var2struct
+from .workspace2struct import workspace2struct

@@ -25,6 +25,13 @@ This file tracks the routines ported so far.
 - `vlt.data.findclosest`: `vlt.data.findclosest`
 - `vlt.data.findrowvec`: `vlt.data.findrowvec`
 - `vlt.data.flattenstruct2table`: `vlt.data.flattenstruct2table`
+- `vlt.data.string2cell`: `vlt.data.string2cell`
+- `vlt.data.structfullfields`: `vlt.data.structfullfields`
+- `vlt.data.structmerge`: `vlt.data.structmerge`
+- `vlt.data.structwhatvaries`: `vlt.data.structwhatvaries`
+- `vlt.data.tabstr2struct`: `vlt.data.tabstr2struct`
+- `vlt.data.var2struct`: `vlt.data.var2struct`
+- `vlt.data.workspace2struct`: `vlt.data.workspace2struct`
 
 ### vlt.file (Dependencies)
 - `vlt.file`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`, `checkout_lock_file`, `release_lock_file`, `addline`
