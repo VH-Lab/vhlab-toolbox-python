@@ -25,6 +25,11 @@ This file tracks the routines ported so far.
 - `vlt.data.findclosest`: `vlt.data.findclosest`
 - `vlt.data.findrowvec`: `vlt.data.findrowvec`
 - `vlt.data.flattenstruct2table`: `vlt.data.flattenstruct2table`
+- `vlt.data.hasAllFields`: `vlt.data.hasAllFields`
+- `vlt.data.hashmatlabvariable`: `vlt.data.hashmatlabvariable`
+- `vlt.data.isint`: `vlt.data.isint`
+- `vlt.data.islikevarname`: `vlt.data.islikevarname`
+- `vlt.data.jsonencodenan`: `vlt.data.jsonencodenan`
 - `vlt.data.matrow2cell`: `vlt.data.matrow2cell`
 - `vlt.data.nanstderr`: `vlt.data.nanstderr`
 - `vlt.data.partial_struct_match`: `vlt.data.partial_struct_match`
