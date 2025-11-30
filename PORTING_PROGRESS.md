@@ -30,6 +30,11 @@ This file tracks the routines ported so far.
 - `vlt.data.isint`: `vlt.data.isint`
 - `vlt.data.islikevarname`: `vlt.data.islikevarname`
 - `vlt.data.jsonencodenan`: `vlt.data.jsonencodenan`
+- `vlt.data.matrow2cell`: `vlt.data.matrow2cell`
+- `vlt.data.nanstderr`: `vlt.data.nanstderr`
+- `vlt.data.partial_struct_match`: `vlt.data.partial_struct_match`
+- `vlt.data.prettyjson`: `vlt.data.prettyjson`
+- `vlt.data.rowvec`: `vlt.data.rowvec`
 
 ### vlt.file (Dependencies)
 - `vlt.file`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`, `checkout_lock_file`, `release_lock_file`, `addline`
