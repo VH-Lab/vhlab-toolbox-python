@@ -25,6 +25,11 @@ This file tracks the routines ported so far.
 - `vlt.data.findclosest`: `vlt.data.findclosest`
 - `vlt.data.findrowvec`: `vlt.data.findrowvec`
 - `vlt.data.flattenstruct2table`: `vlt.data.flattenstruct2table`
+- `vlt.data.hasAllFields`: `vlt.data.hasAllFields`
+- `vlt.data.hashmatlabvariable`: `vlt.data.hashmatlabvariable`
+- `vlt.data.isint`: `vlt.data.isint`
+- `vlt.data.islikevarname`: `vlt.data.islikevarname`
+- `vlt.data.jsonencodenan`: `vlt.data.jsonencodenan`
 
 ### vlt.file (Dependencies)
 - `vlt.file`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`, `checkout_lock_file`, `release_lock_file`, `addline`
