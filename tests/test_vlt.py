@@ -2,9 +2,11 @@ import unittest
 import os
 import shutil
 import numpy as np
+import vlt
 import vlt.app.log
 import vlt.data
 import vlt.file
+from vlt.toolboxdir import toolboxdir
 
 class TestVlt(unittest.TestCase):
     def setUp(self):
@@ -80,6 +82,16 @@ class TestVlt(unittest.TestCase):
         self.assertEqual(vlt.data.conditional(1, 'a', 'b'), 'a')
         self.assertEqual(vlt.data.conditional(0, 'a', 'b'), 'b')
         self.assertEqual(vlt.data.conditional(-1, 'a', 'b'), 'b')
+
+    def test_toolboxdir(self):
+        path = toolboxdir()
+        # Ensure it points to a valid directory
+        self.assertTrue(os.path.isdir(path))
+        # Ensure it contains 'vlt' subdirectory
+        self.assertTrue(os.path.isdir(os.path.join(path, 'vlt')))
+        # Verify it matches expected logic
+        expected = os.path.dirname(os.path.dirname(os.path.abspath(vlt.__file__)))
+        self.assertEqual(path, expected)
 
 if __name__ == '__main__':
     unittest.main()

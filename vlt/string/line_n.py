@@ -30,22 +30,14 @@ def line_n(str_in, n, **kwargs):
     eol = '\n'
     eol_marks = []
 
-    # Process kwargs
-    # We can use vlt.data.assign if it supports updating locals, but here we can just check kwargs
     if 'eol' in kwargs:
         eol = kwargs['eol']
     if 'eol_marks' in kwargs:
         eol_marks = kwargs['eol_marks']
 
-    # Handle if str_in is bytes? Assuming str based on function name
-
     if not eol_marks:
         eol_marks = [i + 1 for i, char in enumerate(str_in) if char == eol]
         if not eol_marks or (len(str_in) > 0 and eol_marks[-1] != len(str_in)):
-             # MATLAB code treats missing EOL at end as implying one
-             # But here we are dealing with indices.
-             # MATLAB: eol_marks(end+1) = length(str)+1;
-             # This effectively means the end of string is a boundary.
              eol_marks.append(len(str_in) + 1)
 
     if n > len(eol_marks):
@@ -58,16 +50,10 @@ def line_n(str_in, n, **kwargs):
         pos = 1
     else:
         pos = eol_marks[n-2] + 1
-        # MATLAB: eol_marks(n-1)+1. Python indices 0-based, so eol_marks[n-2] corresponds to MATLAB eol_marks(n-1)
-
-    # MATLAB: line_n_str = str(pos:eol_marks(n)-1);
-    # In Python slicing, start is inclusive (pos-1), end is exclusive.
-    # MATLAB pos is 1-based.
 
     start_idx = pos - 1
     end_idx = eol_marks[n-1] - 1
 
-    # Special handling if eol_marks includes virtual end
     if end_idx > len(str_in):
         end_idx = len(str_in)
 
