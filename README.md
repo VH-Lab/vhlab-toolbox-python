@@ -1,5 +1,7 @@
-# vhlab_toolbox-python
+# vhlab-toolbox-python
 The python version of the vhlab toolbox
+
+This is not a complete port but is a partial port for supporting NDI-python
 
 ## Installation and Usage
 
