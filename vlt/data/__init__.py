@@ -20,6 +20,7 @@ from .structfullfields import structfullfields
 from .structmerge import structmerge
 from .structwhatvaries import structwhatvaries
 from .tabstr2struct import tabstr2struct
+from .struct2tabstr import struct2tabstr
 from .var2struct import var2struct
 from .workspace2struct import workspace2struct
 from .matrow2cell import matrow2cell
