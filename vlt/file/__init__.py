@@ -269,6 +269,7 @@ from .custom_struct_io import loadStructArray, saveStructArray
 from .dirstruct import dirstruct
 from .fixpath import fixpath
 from .fixtilde import fixtilde
+from .load2celllist import load2celllist
 
 # --- Classes ---
 
