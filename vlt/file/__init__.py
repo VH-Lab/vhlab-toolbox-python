@@ -264,6 +264,12 @@ def addline(filename, message):
 
     return b, errormsg
 
+# --- Helpers ---
+from .custom_struct_io import loadStructArray, saveStructArray
+from .dirstruct import dirstruct
+from .fixpath import fixpath
+from .fixtilde import fixtilde
+
 # --- Classes ---
 
 class fileobj:
