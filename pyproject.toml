@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vhlab-toolbox-python"
+version = "0.1.0"
+description = "Python port of vhlab-toolbox-matlab"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "h5py",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.urls]
+Repository = "https://github.com/VH-Lab/vhlab-toolbox-python"
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E501",   # line too long — existing code
+    "E701",   # multiple statements on one line — existing style
+    "E741",   # ambiguous variable name — existing style
+    "F401",   # unused imports — many in existing code
+    "F841",   # local variable assigned but never used — existing code
+    "E722",   # bare except — existing code
+    "E402",   # module-level import not at top — existing code
+    "W293",   # blank line contains whitespace — existing code
+    "W605",   # invalid escape sequence — existing code
+]
+
+[tool.setuptools.packages.find]
+include = ["vlt*"]
