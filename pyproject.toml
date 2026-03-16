@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vhlab-toolbox-python"
+version = "0.1.0"
+description = "Python port of vhlab-toolbox-matlab"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "h5py",
+]
+
+[project.urls]
+Repository = "https://github.com/VH-Lab/vhlab-toolbox-python"
+
+[tool.setuptools.packages.find]
+include = ["vlt*"]
