@@ -8,6 +8,15 @@ def structwhatvaries(list_of_structures):
 
     Given a list of structures (dicts), returns a list of the fieldnames that vary in
     value across the list.
+
+    NaN semantics: equality is tested with vlt.data.eqlen, and NaN does not
+    compare equal to itself. A field that is NaN in *every* structure is
+    therefore reported as varying, which is usually not what a caller expects.
+    This matches the MATLAB toolbox's behaviour; see
+    VH-Lab/vhlab-toolbox-matlab#137 (item 3), where whether to change it is
+    still open. Callers needing NaN-aware behaviour should filter the result
+    or compare with numpy.array_equal(..., equal_nan=True) themselves, as
+    VH-Lab/NDI-matlab#902 did.
     """
     descr = []
 
