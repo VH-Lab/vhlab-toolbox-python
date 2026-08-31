@@ -1,4 +1,22 @@
-from vlt.data.eqlen import eqlen
+import numpy as np
+
+
+def _equal_including_nan(x, y):
+    """Same shape and contents, treating NaN as equal to itself.
+
+    The numpy equivalent of MATLAB's isequaln, and of vlt.data.eqlen except
+    for the NaN handling. equal_nan is unsupported for object and string
+    dtypes, where NaN cannot occur anyway, so fall back for those.
+    """
+    x = np.asarray(x)
+    y = np.asarray(y)
+    if x.shape != y.shape:
+        return False
+    try:
+        return bool(np.array_equal(x, y, equal_nan=True))
+    except (TypeError, ValueError):
+        return bool(np.array_equal(x, y))
+
 
 def structwhatvaries(list_of_structures):
     """
@@ -9,14 +27,15 @@ def structwhatvaries(list_of_structures):
     Given a list of structures (dicts), returns a list of the fieldnames that vary in
     value across the list.
 
-    NaN semantics: equality is tested with vlt.data.eqlen, and NaN does not
-    compare equal to itself. A field that is NaN in *every* structure is
-    therefore reported as varying, which is usually not what a caller expects.
-    This matches the MATLAB toolbox's behaviour; see
-    VH-Lab/vhlab-toolbox-matlab#137 (item 3), where whether to change it is
-    still open. Callers needing NaN-aware behaviour should filter the result
-    or compare with numpy.array_equal(..., equal_nan=True) themselves, as
-    VH-Lab/NDI-matlab#902 did.
+    NaN semantics: equality is NaN-aware, so a field that is NaN in every
+    structure counts as constant and is NOT reported as varying. Resolved in
+    VH-Lab/vhlab-toolbox-matlab#137 (item 3); the MATLAB port makes the
+    matching change, using isequaln in its own structwhatvaries.
+
+    The fix is deliberately here rather than in vlt.data.eqlen, mirroring
+    MATLAB: eqlen is widely used, and changing its NaN semantics would ripple
+    much further than this one call site. VH-Lab/NDI-matlab#902 took the same
+    route. Keep the two ports in step -- they are meant to agree.
     """
     descr = []
 
@@ -49,7 +68,7 @@ def structwhatvaries(list_of_structures):
         for field in bothfn:
             val1 = list_of_structures[0][field]
             val2 = s2[field]
-            if not eqlen(val1, val2):
+            if not _equal_including_nan(val1, val2):
                 descr.append(field)
 
     # Unique and sort

@@ -49,6 +49,29 @@ class TestDataFunctionsBatch2(unittest.TestCase):
         # a, b, c
         self.assertEqual(list(merged_unordered.keys()), ['a', 'b', 'c'])
 
+    def test_structwhatvaries_nan_field_is_not_varying(self):
+        # Issue VH-Lab/vhlab-toolbox-matlab#137 item 3. A field that is NaN in
+        # every structure is constant, not varying. Kept in step with MATLAB.
+        s1 = {'angle': float('nan'), 'sf': 1}
+        s2 = {'angle': float('nan'), 'sf': 1}
+        self.assertEqual(vlt.data.structwhatvaries([s1, s2]), [])
+
+    def test_structwhatvaries_nan_within_array_is_not_varying(self):
+        s1 = {'v': [1, float('nan'), 3]}
+        s2 = {'v': [1, float('nan'), 3]}
+        self.assertEqual(vlt.data.structwhatvaries([s1, s2]), [])
+
+    def test_structwhatvaries_nan_versus_number_still_varies(self):
+        # NaN-aware must not mean NaN-blind.
+        s1 = {'angle': float('nan')}
+        s2 = {'angle': 5}
+        self.assertEqual(vlt.data.structwhatvaries([s1, s2]), ['angle'])
+
+    def test_eqlen_nan_semantics_unchanged(self):
+        # eqlen deliberately keeps == semantics; the NaN-awareness lives at
+        # the call site. Guards against someone "fixing" eqlen instead.
+        self.assertFalse(vlt.data.eqlen(float('nan'), float('nan')))
+
     def test_structwhatvaries(self):
         s1 = {'a': 1, 'b': 2}
         s2 = {'a': 1, 'b': 3}
