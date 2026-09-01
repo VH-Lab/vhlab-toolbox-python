@@ -227,18 +227,38 @@ def vhsb_write(fo, x, y, **kwargs):
         'Y_offset': 0
     }
 
+    # The sample-count guards below are MATLAB's, and they are load-bearing
+    # rather than stylistic. vhsb_write.m reads:
+    #
+    #     if numel(x)>2, X_increment = median(diff(x)); else, X_increment = 0; end;
+    #     if numel(x)>3, X_constantinterval = (max(diff(diff(x)))<1e-7); else, X_constantinterval = 0; end;
+    #
+    # This port previously used a single `len(x) > 1` guard for both, which
+    # made a TWO-SAMPLE series raise: diff(x) has one element, diff of that is
+    # empty, and np.max of an empty array is a ValueError. MATLAB never
+    # evaluates max() on an empty array because of the numel(x)>3 guard, so
+    # writing two samples works there and crashed here.
     if len(x) > 0:
         defaults['X_start'] = x.flat[0]
-        if len(x) > 1:
-            defaults['X_increment'] = np.median(np.diff(x.flatten()))
-            dx = np.diff(x.flatten())
-            defaults['X_constantinterval'] = 1 if (np.max(np.abs(np.diff(dx))) < 1e-7) else 0
-        else:
-            defaults['X_increment'] = 0
-            defaults['X_constantinterval'] = 0
     else:
         defaults['X_start'] = 0
+
+    if len(x) > 2:
+        defaults['X_increment'] = np.median(np.diff(x.flatten()))
+    else:
         defaults['X_increment'] = 0
+
+    if len(x) > 3:
+        dx = np.diff(x.flatten())
+        # NOTE: MATLAB writes max(diff(dx)) with no abs(), which marks a
+        # series whose interval SHRINKS as constant-interval and reads it back
+        # against a median increment that does not describe it. abs() is kept
+        # here because it is correct; the two languages therefore disagree for
+        # that input, and the MATLAB side is reported separately. X is stored
+        # in the file either way, so the disagreement changes which samples a
+        # windowed read selects, not the values it returns.
+        defaults['X_constantinterval'] = 1 if (np.max(np.abs(np.diff(dx))) < 1e-7) else 0
+    else:
         defaults['X_constantinterval'] = 0
 
     defaults['X_stored'] = 1
