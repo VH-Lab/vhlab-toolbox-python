@@ -73,6 +73,42 @@ class TestDataFunctionsBatch2(unittest.TestCase):
         with self.assertRaises(TypeError):
             vlt.data.structwhatvaries("not a list")
 
+    def test_structwhatvaries_nan(self):
+        # Comparison is NaN-aware, mirroring the MATLAB toolbox's switch to
+        # isequaln in vhlab-toolbox-matlab#137 (item 3). A field that is NaN
+        # in every structure is constant, not varying over one distinct value.
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'angle': np.nan, 'b': 1},
+                                       {'angle': np.nan, 'b': 1}]), [])
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'v': [1, np.nan, 3]},
+                                       {'v': [1, np.nan, 3]}]), [])
+
+        # NaN-aware does not mean NaN matches everything.
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'angle': np.nan}, {'angle': 30}]),
+            ['angle'])
+
+        # vlt.data.eqlen keeps its own NaN-not-equal semantics; only this
+        # call site changed. Guard the two against drifting together.
+        self.assertFalse(vlt.data.eqlen(np.nan, np.nan))
+
+    def test_structwhatvaries_non_numeric_values(self):
+        # Sequence- and dict-valued fields compare rather than raising, which
+        # is also true of the MATLAB copy now that it uses isequaln.
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'c': ['r', 'g', 'b']},
+                                       {'c': ['r', 'g', 'b']}]), [])
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'c': ['r', 'g', 'b']},
+                                       {'c': ['r', 'g', 'x']}]), ['c'])
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'d': {'x': 1}}, {'d': {'x': 2}}]), ['d'])
+
+        # Differing shapes vary, they do not raise.
+        self.assertEqual(
+            vlt.data.structwhatvaries([{'v': [1, 2]}, {'v': [1, 2, 3]}]), ['v'])
+
     def test_tabstr2struct(self):
         s = '1\t2.5\tstring\t2023-01-01'
         fields = ['a', 'b', 'c', 'd']
