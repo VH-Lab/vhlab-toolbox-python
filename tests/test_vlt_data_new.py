@@ -34,6 +34,17 @@ class TestVltDataNew(unittest.TestCase):
         self.assertFalse(vlt.data.eqlen([1, 2], [1, 3]))
         self.assertTrue(vlt.data.eqlen(1, 1))
 
+        # NaN is not equal to itself, matching MATLAB's eqlen, which bottoms
+        # out in x==y. vhlab-toolbox-matlab#137 (item 3) deliberately left
+        # this alone and fixed structwhatvaries at its call site instead.
+        self.assertFalse(vlt.data.eqlen(np.nan, np.nan))
+        self.assertFalse(vlt.data.eqlen([1, np.nan], [1, np.nan]))
+
+        # No operator gap here: MATLAB raises on cell arrays, this returns a
+        # value. See vhlab-toolbox-matlab#137 (item 2).
+        self.assertTrue(vlt.data.eqlen(['r', 'g', 'b'], ['r', 'g', 'b']))
+        self.assertFalse(vlt.data.eqlen(['r', 'g', 'b'], ['r', 'g', 'x']))
+
     def test_equnique(self):
         a = [1, 2, 3, 2, 1]
         u = vlt.data.equnique(a)

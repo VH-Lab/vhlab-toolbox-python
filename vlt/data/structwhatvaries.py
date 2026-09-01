@@ -1,4 +1,25 @@
-from vlt.data.eqlen import eqlen
+import numpy as np
+
+def _isequaln(a, b):
+    """
+    NaN-aware equality, mirroring MATLAB's ISEQUALN.
+
+    Equal shape and equal entries, except that NaN compares equal to NaN.
+    This is the comparison MATLAB's vlt.data.structwhatvaries switched to in
+    VH-Lab/vhlab-toolbox-matlab#137 (item 3); it is kept private here because
+    the decision there was to change the call site, not vlt.data.eqlen.
+    """
+    aa = np.asarray(a)
+    bb = np.asarray(b)
+
+    if aa.shape != bb.shape:
+        return False
+
+    # equal_nan is only meaningful -- and only accepted -- for inexact dtypes.
+    if aa.dtype.kind in 'fc' and bb.dtype.kind in 'fc':
+        return bool(np.array_equal(aa, bb, equal_nan=True))
+
+    return bool(np.array_equal(aa, bb))
 
 def structwhatvaries(list_of_structures):
     """
@@ -9,14 +30,15 @@ def structwhatvaries(list_of_structures):
     Given a list of structures (dicts), returns a list of the fieldnames that vary in
     value across the list.
 
-    NaN semantics: equality is tested with vlt.data.eqlen, and NaN does not
-    compare equal to itself. A field that is NaN in *every* structure is
-    therefore reported as varying, which is usually not what a caller expects.
-    This matches the MATLAB toolbox's behaviour; see
-    VH-Lab/vhlab-toolbox-matlab#137 (item 3), where whether to change it is
-    still open. Callers needing NaN-aware behaviour should filter the result
-    or compare with numpy.array_equal(..., equal_nan=True) themselves, as
-    VH-Lab/NDI-matlab#902 did.
+    NaN semantics: values are compared with NaN-aware equality (NaN equals
+    NaN), so a field that is NaN in *every* structure is NOT reported as
+    varying. This matches the MATLAB toolbox, whose structwhatvaries compares
+    with ISEQUALN; see VH-Lab/vhlab-toolbox-matlab#137 (item 3), which decided
+    to fix this at the call site rather than in eqlen, and VH-Lab/NDI-matlab#902.
+
+    vlt.data.eqlen is deliberately NOT used here and keeps its own
+    NaN-not-equal semantics, exactly as MATLAB's EQLEN does. Changing this
+    function without changing eqlen keeps the two ports symmetric.
     """
     descr = []
 
@@ -49,7 +71,7 @@ def structwhatvaries(list_of_structures):
         for field in bothfn:
             val1 = list_of_structures[0][field]
             val2 = s2[field]
-            if not eqlen(val1, val2):
+            if not _isequaln(val1, val2):
                 descr.append(field)
 
     # Unique and sort
