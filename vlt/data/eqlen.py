@@ -19,12 +19,13 @@ def eqlen(x, y):
     Callers wanting NaN-aware equality should use something like
     numpy.array_equal(x, y, equal_nan=True) at their own call site.
 
-    Known divergence from MATLAB: MATLAB's eqemp bottoms out in a literal
-    `x==y`, which MATLAB does not define for cell arrays, so MATLAB's
-    eqlen({'r','g','b'}, {'r','g','b'}) raises rather than returning a value
-    (vhlab-toolbox-matlab#137, item 2). This port has no such operator gap --
-    the equivalent call returns True. Cross-language comparisons should not
-    expect an error here.
+    Cell arrays / lists of strings: the two ports agree, and neither raises.
+    MATLAB's eqemp bottoms out in a literal `x==y`, and its help long claimed
+    that an undefined `==` made eqlen({'r','g','b'}, ...) an error. CI on
+    vhlab-toolbox-matlab#137 (item 2) measured otherwise -- it compares the
+    contents and answers -- which matches this port and matches what NDI's
+    cross-language symmetry battery observed. Cross-language comparisons
+    should not expect an error here on either side.
     """
 
     # Handle scalar / array differences

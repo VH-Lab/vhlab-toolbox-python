@@ -40,8 +40,9 @@ class TestVltDataNew(unittest.TestCase):
         self.assertFalse(vlt.data.eqlen(np.nan, np.nan))
         self.assertFalse(vlt.data.eqlen([1, np.nan], [1, np.nan]))
 
-        # No operator gap here: MATLAB raises on cell arrays, this returns a
-        # value. See vhlab-toolbox-matlab#137 (item 2).
+        # Lists of strings answer rather than raising, and MATLAB's eqlen was
+        # measured in CI to do the same on cell arrays, despite its help text
+        # claiming an error. See vhlab-toolbox-matlab#137 (item 2).
         self.assertTrue(vlt.data.eqlen(['r', 'g', 'b'], ['r', 'g', 'b']))
         self.assertFalse(vlt.data.eqlen(['r', 'g', 'b'], ['r', 'g', 'x']))
 
