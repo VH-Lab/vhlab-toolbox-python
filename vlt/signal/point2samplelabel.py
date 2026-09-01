@@ -27,6 +27,16 @@ def point2samplelabel(ti, dt, t0=0):
     So if s=1, offset is 0. This implies s is 1-based index.
 
     So we will return `1 + round((ti-t0)/dt)`.
+
+    The result is returned as a FLOAT, matching MATLAB, where the expression
+    is double arithmetic and no integer cast happens. That matters for
+    infinite inputs: vhsb_read asks for sample labels of x0 = -Inf and
+    x1 = +Inf and then clips them into [1, num_samples]. In MATLAB
+    round(-Inf) is -Inf and clip(-Inf, [1 N]) is 1, so the whole series is
+    selected. Casting to int first makes numpy convert +/-Inf to an
+    undefined integer -- with a RuntimeWarning -- and the clip then bounds
+    garbage, which returned ONE sample instead of N. Callers that need an
+    index should cast after clipping, as vhsb_read now does.
     """
-    ti = np.array(ti)
-    return 1 + np.round((ti - t0) / dt).astype(int)
+    ti = np.array(ti, dtype=float)
+    return 1 + np.round((ti - t0) / dt)
