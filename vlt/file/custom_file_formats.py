@@ -231,7 +231,7 @@ def vhsb_write(fo, x, y, **kwargs):
     # rather than stylistic. vhsb_write.m reads:
     #
     #     if numel(x)>2, X_increment = median(diff(x)); else, X_increment = 0; end;
-    #     if numel(x)>3, X_constantinterval = (max(diff(diff(x)))<1e-7); else, X_constantinterval = 0; end;
+    #     if numel(x)>3, X_constantinterval = (max(abs(diff(diff(x))))<1e-7); else, X_constantinterval = 0; end;
     #
     # This port previously used a single `len(x) > 1` guard for both, which
     # made a TWO-SAMPLE series raise: diff(x) has one element, diff of that is
@@ -250,13 +250,12 @@ def vhsb_write(fo, x, y, **kwargs):
 
     if len(x) > 3:
         dx = np.diff(x.flatten())
-        # NOTE: MATLAB writes max(diff(dx)) with no abs(), which marks a
-        # series whose interval SHRINKS as constant-interval and reads it back
-        # against a median increment that does not describe it. abs() is kept
-        # here because it is correct; the two languages therefore disagree for
-        # that input, and the MATLAB side is reported separately. X is stored
-        # in the file either way, so the disagreement changes which samples a
-        # windowed read selects, not the values it returns.
+        # The abs() is the whole test: this asks whether the sampling interval
+        # CHANGES, and a series whose interval shrinks has an all-negative
+        # second difference, so max() without abs() is negative and compares
+        # less than the tolerance. MATLAB omitted the abs() and so flagged a
+        # shrinking series as constant-interval; that is fixed
+        # (VH-Lab/vhlab-toolbox-matlab#145) and the two languages now agree.
         defaults['X_constantinterval'] = 1 if (np.max(np.abs(np.diff(dx))) < 1e-7) else 0
     else:
         defaults['X_constantinterval'] = 0

@@ -93,6 +93,54 @@ class TestHeaderGuardsMatchMatlab(unittest.TestCase):
                 self.assertEqual(self._header_for(n)["X_increment"], expected)
 
 
+class TestMonotonicIntervalChange(unittest.TestCase):
+    """A shrinking interval is not a constant interval.
+
+    ``X_constantinterval`` is a magnitude test on the second difference of X,
+    so it must be taken on ``abs()``. A series whose interval shrinks has an
+    all-negative second difference, and ``max()`` of that is negative, which
+    compares less than the tolerance. MATLAB wrote ``max(diff(diff(x)))`` with
+    no ``abs()`` and so recorded such a series as constant-interval; the two
+    languages disagreed for this input until
+    VH-Lab/vhlab-toolbox-matlab#145 was fixed.
+
+    X is stored in the file either way, so the flag does not change what a full
+    read returns -- it changes which samples a WINDOWED read selects, because
+    the constant-interval branch derives sample labels from ``X_increment``.
+    """
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+
+    # intervals 1, 0.5, 0.25; median(diff(x)) is 0.5, which describes none of them
+    SHRINKING = [0.0, 1.0, 1.5, 1.75]
+
+    def test_shrinking_interval_is_not_constant(self):
+        path = os.path.join(self.dir, "shrink.vhsb")
+        header, rx, ry, x, y = _round_trip(path, self.SHRINKING, [1, 2, 3, 4])
+        self.assertEqual(header["X_constantinterval"], 0)
+        self.assertTrue(np.array_equal(rx, x.ravel()))
+
+    def test_growing_interval_is_not_constant(self):
+        path = os.path.join(self.dir, "grow.vhsb")
+        header, _, _, _, _ = _round_trip(path, [0.0, 0.25, 0.75, 1.75], [1, 2, 3, 4])
+        self.assertEqual(header["X_constantinterval"], 0)
+
+    def test_windowed_read_of_a_shrinking_series(self):
+        """The consequence of the flag: 1.5..1.75 is two samples, not one.
+
+        Flagged constant-interval, point2samplelabel(1.5, 0.5, 0) is sample 4
+        and 1.75 clips to 4 as well, so only the last sample comes back.
+        """
+        path = os.path.join(self.dir, "window.vhsb")
+        x = np.asarray(self.SHRINKING).reshape(-1, 1)
+        y = np.asarray([1.0, 2.0, 3.0, 4.0]).reshape(-1, 1)
+        cff.vhsb_write(path, x, y, use_filelock=0)
+        ry, rx = cff.vhsb_read(path, 1.5, 1.75)
+        self.assertTrue(np.allclose(np.asarray(rx).ravel(), [1.5, 1.75]))
+        self.assertTrue(np.allclose(np.asarray(ry).ravel(), [3.0, 4.0]))
+
+
 class TestInfiniteBounds(unittest.TestCase):
     """Reading a whole constant-interval series with +/-Inf bounds.
 
