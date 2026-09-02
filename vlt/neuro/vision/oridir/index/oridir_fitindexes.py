@@ -1,9 +1,9 @@
 import numpy as np
-import vlt.fit.otfit_carandini as otfit
-import vlt.neuro.vision.oridir.index.fit2fitoi as f2foi
-import vlt.neuro.vision.oridir.index.fit2fitoidiffsum as f2foids
-import vlt.neuro.vision.oridir.index.fit2fitdi as f2fdi
-import vlt.neuro.vision.oridir.index.fit2fitdidiffsum as f2fdids
+from vlt.fit.otfit_carandini import otfit_carandini
+from vlt.neuro.vision.oridir.index.fit2fitoi import fit2fitoi
+from vlt.neuro.vision.oridir.index.fit2fitoidiffsum import fit2fitoidiffsum
+from vlt.neuro.vision.oridir.index.fit2fitdi import fit2fitdi
+from vlt.neuro.vision.oridir.index.fit2fitdidiffsum import fit2fitdidiffsum
 from vlt.math.rectify import rectify
 from vlt.data.rowvec import rowvec
 
@@ -45,7 +45,7 @@ def oridir_fitindexes(respstruct):
     Rsp, Rp, Ot, sigm, Rn, fitcurve, er, R2 = None, None, None, None, None, None, None, None
 
     for ws in widthseeds:
-        Rspt, Rpt, Ott, sigmt, Rnt, fitcurvet, ert, R2t = otfit.otfit_carandini(
+        Rspt, Rpt, Ott, sigmt, Rnt, fitcurvet, ert, R2t = otfit_carandini(
             tuneangles, 0, maxresp, otpref, ws,
             widthint=[da/2, 180],
             Rpint=[0, 3*maxresp],
@@ -65,16 +65,16 @@ def oridir_fitindexes(respstruct):
     # fi.fit = [0:359; vlt.data.rowvec(fitcurve)];
     fi['fit'] = np.vstack([np.arange(360), rowvec(fitcurve)])
 
-    fi['ot_index'] = f2foi.fit2fitoi(fi['fit'])
+    fi['ot_index'] = fit2fitoi(fi['fit'])
     fi['ot_index_rectified'] = min(rectify(fi['ot_index']), 1)
-    fi['ot_index_diffsum'] = f2foids.fit2fitoidiffsum(fi['fit'])
+    fi['ot_index_diffsum'] = fit2fitoidiffsum(fi['fit'])
     fi['ot_index_diffsum_rectified'] = min(rectify(fi['ot_index_diffsum']), 1)
 
     fi['dirpref'] = Ot
 
-    fi['dir_index'] = f2fdi.fit2fitdi(fi['fit'])
+    fi['dir_index'] = fit2fitdi(fi['fit'])
     fi['dir_index_rectified'] = min(rectify(fi['dir_index']), 1)
-    fi['dir_index_diffsum'] = f2fdids.fit2fitdidiffsum(fi['fit'])
+    fi['dir_index_diffsum'] = fit2fitdidiffsum(fi['fit'])
     fi['dir_index_diffsum_rectified'] = min(rectify(fi['dir_index_diffsum']), 1)
 
     fi['tuning_width'] = sigm * np.sqrt(np.log(4))
