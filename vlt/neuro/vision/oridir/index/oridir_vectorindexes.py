@@ -1,11 +1,11 @@
 import numpy as np
-import vlt.stats.hotellingt2test as hotelling
-import vlt.neuro.vision.oridir.index.compute_circularvariance as ccv
-import vlt.neuro.vision.oridir.index.compute_orientationindex as coi
-import vlt.neuro.vision.oridir.index.compute_tuningwidth as ctw
-import vlt.neuro.vision.oridir.index.compute_dircircularvariance as cdcv
-import vlt.neuro.vision.oridir.index.compute_directionindex as cdi
-import vlt.neuro.vision.oridir.index.compute_directionsignificancedotproduct as cdsdp
+from vlt.stats.hotellingt2test import hotellingt2test
+from vlt.neuro.vision.oridir.index.compute_circularvariance import compute_circularvariance
+from vlt.neuro.vision.oridir.index.compute_orientationindex import compute_orientationindex
+from vlt.neuro.vision.oridir.index.compute_tuningwidth import compute_tuningwidth
+from vlt.neuro.vision.oridir.index.compute_dircircularvariance import compute_dircircularvariance
+from vlt.neuro.vision.oridir.index.compute_directionindex import compute_directionindex
+from vlt.neuro.vision.oridir.index.compute_directionsignificancedotproduct import compute_directionsignificancedotproduct
 
 def oridir_vectorindexes(respstruct):
     """
@@ -97,7 +97,7 @@ def oridir_vectorindexes(respstruct):
 
             # Hotelling T2 on real/imag parts against [0, 0]
             X = np.column_stack((np.real(vecresp_ot), np.imag(vecresp_ot)))
-            h2, vi['ot_HotellingT2_p'] = hotelling.hotellingt2test(X, [0, 0])
+            h2, vi['ot_HotellingT2_p'] = hotellingt2test(X, [0, 0])
 
             vi['ot_pref'] = (180 / np.pi * np.angle(np.mean(vecresp_ot))) % 180
 
@@ -106,18 +106,18 @@ def oridir_vectorindexes(respstruct):
                 vecresp_dir = np.dot(allresps, np.exp(1j * (angles_rad % (2 * np.pi))))
 
                 X_dir = np.column_stack((np.real(vecresp_dir), np.imag(vecresp_dir)))
-                h3, vi['dir_HotellingT2_p'] = hotelling.hotellingt2test(X_dir, [0, 0])
+                h3, vi['dir_HotellingT2_p'] = hotellingt2test(X_dir, [0, 0])
 
                 vi['dir_pref'] = (180 / np.pi * np.angle(np.mean(vecresp_dir))) % 360
 
-                vi['dir_dotproduct_sig_p'] = cdsdp.compute_directionsignificancedotproduct(angles, allresps)
+                vi['dir_dotproduct_sig_p'] = compute_directionsignificancedotproduct(angles, allresps)
 
-    vi['ot_circularvariance'] = ccv.compute_circularvariance(tuneangles, tuneresps)
-    vi['ot_index'] = coi.compute_orientationindex(tuneangles, tuneresps)
-    vi['tuning_width'] = ctw.compute_tuningwidth(tuneangles, tuneresps)
+    vi['ot_circularvariance'] = compute_circularvariance(tuneangles, tuneresps)
+    vi['ot_index'] = compute_orientationindex(tuneangles, tuneresps)
+    vi['tuning_width'] = compute_tuningwidth(tuneangles, tuneresps)
 
     if hasdirection:
-        vi['dir_circularvariance'] = cdcv.compute_dircircularvariance(tuneangles, tuneresps)
-        vi['dir_index'] = cdi.compute_directionindex(angles, mean_resp)
+        vi['dir_circularvariance'] = compute_dircircularvariance(tuneangles, tuneresps)
+        vi['dir_index'] = compute_directionindex(angles, mean_resp)
 
     return vi
