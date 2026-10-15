@@ -45,3 +45,6 @@ This file tracks the routines ported so far.
 
 ### vlt.file (Dependencies)
 - `vlt.file`: `isfilepathroot`, `isfile`, `fullfilename`, `createpath`, `touch`, `text2cellstr`, `checkout_lock_file`, `release_lock_file`, `addline`
+
+### vlt.image
+- `vlt.image.prevailing_orientation`: `vlt.image.prevailing_orientation`
