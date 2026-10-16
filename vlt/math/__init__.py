@@ -1,5 +1,7 @@
 from .clip import clip
 from .rectify import rectify
+from .fouriercoeffs import fouriercoeffs
+from .fouriercoeffs_2d import fouriercoeffs_2d
 from .fouriercoeffs_tf2 import fouriercoeffs_tf2
 from .fouriercoeffs_tf_spikes import fouriercoeffs_tf_spikes
 from .group_enumeration import group_enumeration

@@ -48,3 +48,7 @@ This file tracks the routines ported so far.
 
 ### vlt.image
 - `vlt.image.prevailing_orientation`: `vlt.image.prevailing_orientation`
+
+### vlt.math
+- `vlt.math.fouriercoeffs`: `vlt.math.fouriercoeffs`
+- `vlt.math.fouriercoeffs_2d`: `vlt.math.fouriercoeffs_2d`
